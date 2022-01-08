@@ -75,12 +75,13 @@
   <script>
     function updateDisplay() {
       const todayDate = new Date();
+      const date = document.getElementById("diaryDate");
       const header = document.getElementById("isApologize").checked
-        ? todayDate.getDate() +
+        ? new Date(date.value).getDate() +
           "日の分を書いてなかったので書きます。\n" +
-          todayDate.getDate() +
+          new Date(date.value).getDate() +
           "日は"
-        : todayDate.getDate() + "日は";
+        : new Date(date.value).getDate() + "日は";
       const body = document.getElementById("body").value;
       const footer = "\n\n" + document.getElementById("footer").value;
       const hashTag = "\n#でろん今日の進捗";
