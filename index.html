@@ -1,109 +1,88 @@
 <!DOCTYPE html>
 <html lang="jp">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>進捗報告ジェネレーター</title>
-  </head>
-  <style>
-    .shareButton {
-      font-size: 15px;
-      position: relative;
-      display: inline-block;
-      padding: 3px 15px;
-      transition: 0s;
-      text-align: center;
-      vertical-align: middle;
-      text-decoration: none;
-      border-radius: 100vh;
-    }
 
-    .shareButton-twitter {
-      color: #fff;
-      background-color: #1d9bf0;
-    }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>進捗報告ジェネレーター</title>
+</head>
+<style>
+  .shareButton {
+    font-size: 15px;
+    position: relative;
+    display: inline-block;
+    padding: 3px 15px;
+    transition: 0s;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    border-radius: 100vh;
+  }
 
-    .shareButton-twitter:hover {
-      color: #fff;
-      background: #0c7abf;
-    }
-  </style>
-  <link
-    href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
-    rel="stylesheet"
-  />
-  <body>
-    Header
-    <br />
-    <input type="date" name="" id="diaryDate" />
-    <input type="checkbox" name="" id="isApologize" />Apologize mode
-    <br />
-    Body
-    <br />
-    <textarea
-      name=""
-      id="body"
-      cols="40"
-      rows="10"
-      placeholder="〇〇をやったり△△をやったりしました。
-明日は□□をやりたい！"
-    ></textarea>
-    <br />
-    Footer
-    <br />
-    <textarea
-      name=""
-      id="footer"
-      cols="40"
-      rows="2"
-      placeholder="VRC入ったら寝ます！おやすみなさい！"
-    ></textarea>
-    <br />
-    Preview
-    <br />
-    <textarea name="" id="preview" cols="40" rows="12" readonly></textarea>
-    <div id="hoge"></div>
-    <a
-      href="https://twitter.com/share"
-      class="shareButton shareButton-twitter"
-      id="shareTwitter"
-      ><i class="fab fa-twitter"> </i> Tweet</a
-    >
-  </body>
+  .shareButton-twitter {
+    color: #fff;
+    background-color: #1d9bf0;
+  }
 
-  <script>
-    function updateDisplay() {
-      const todayDate = new Date();
-      const date = document.getElementById("diaryDate");
-      const header = document.getElementById("isApologize").checked
-        ? new Date(date.value).getDate() +
-          "日の分を書いてなかったので書きます。\n" +
-          new Date(date.value).getDate() +
-          "日は"
-        : new Date(date.value).getDate() + "日は";
-      const body = document.getElementById("body").value;
-      const footer = "\n\n" + document.getElementById("footer").value;
-      const hashTag = "\n#でろん今日の進捗";
-      const result = header + body + footer + hashTag;
-      document.getElementById("preview").value = result;
-      document.getElementById("shareTwitter").href =
-        "https://twitter.com/share?text=" + encodeURIComponent(result);
-      return;
-    }
+  .shareButton-twitter:hover {
+    color: #fff;
+    background: #0c7abf;
+  }
 
-    // 日付の設定
-    let todayDate = new Date();
-    todayDate.setDate(todayDate.getDate());
-    let yyyy = todayDate.getFullYear();
-    let mm = ("0" + (todayDate.getMonth() + 1)).slice(-2);
-    let dd = ("0" + todayDate.getDate()).slice(-2);
+</style>
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet" />
 
-    const diaryDate = document.getElementById("diaryDate");
-    const todayStr = yyyy + "-" + mm + "-" + dd;
-    diaryDate.value = todayStr;
-    diaryDate.setAttribute("max", todayStr);
+<body>
+  Header
+  <br />
+  <input type="date" name="" id="diaryDate" />
+  <input type="checkbox" name="" id="isApologize" />Apologize mode
+  <br />
+  Body
+  <br />
+  <textarea name="" id="body" cols="40" rows="10" placeholder="〇〇をやったり△△をやったりしました。
+明日は□□をやりたい！"></textarea>
+  <br />
+  Footer
+  <br />
+  <textarea name="" id="footer" cols="40" rows="2" placeholder="VRC入ったら寝ます！おやすみなさい！"></textarea>
+  <br />
+  Preview
+  <br />
+  <textarea name="" id="preview" cols="40" rows="12" readonly></textarea>
+  <div id="hoge"></div>
+  <a href="https://twitter.com/share" class="shareButton shareButton-twitter" id="shareTwitter"><i
+      class="fab fa-twitter"> </i> Tweet</a>
+</body>
 
-    setInterval("updateDisplay()", 100);
-  </script>
+<script>
+  function updateDisplay() {
+    const diaryDate = new Date(document.getElementById("diaryDate").value).getDate();
+    const header = document.getElementById("isApologize").checked
+      ? diaryDate + "日の分を書いてなかったので書きます。\n" + diaryDate + "日は"
+      : diaryDate + "日は";
+    const body = document.getElementById("body").value;
+    const footer = "\n\n" + document.getElementById("footer").value + "\n#でろん今日の進捗";
+    const result = header + body + footer;
+    document.getElementById("preview").value = result;
+    document.getElementById("shareTwitter").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(result);
+    return;
+  }
+
+  // 日付の設定
+  let todayDate = new Date();
+  todayDate.setDate(todayDate.getDate());
+  let yyyy = todayDate.getFullYear();
+  let mm = ("0" + (todayDate.getMonth() + 1)).slice(-2);
+  let dd = ("0" + todayDate.getDate()).slice(-2);
+
+  const diaryDate = document.getElementById("diaryDate");
+  const todayStr = yyyy + "-" + mm + "-" + dd;
+  diaryDate.value = todayStr;
+  diaryDate.setAttribute("max", todayStr);
+
+  setInterval("updateDisplay()", 100);
+</script>
+
 </html>
