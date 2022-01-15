@@ -70,17 +70,33 @@
     return;
   }
 
-  // 日付の設定
-  let todayDate = new Date();
-  todayDate.setDate(todayDate.getDate());
-  let yyyy = todayDate.getFullYear();
-  let mm = ("0" + (todayDate.getMonth() + 1)).slice(-2);
-  let dd = ("0" + todayDate.getDate()).slice(-2);
+  function getDateStrForDateInput(date) {
+    const yyyy = date.getFullYear();
+    const mm = ("0" + (date.getMonth() + 1)).slice(-2);
+    const dd = ("0" + date.getDate()).slice(-2);
+    return yyyy + "-" + mm + "-" + dd;
+  }
 
-  const diaryDate = document.getElementById("diaryDate");
-  const todayStr = yyyy + "-" + mm + "-" + dd;
-  diaryDate.value = todayStr;
-  diaryDate.setAttribute("max", todayStr);
+  // 日付の設定
+  const today = new Date();
+  const diaryDateElement = document.getElementById("diaryDate");
+  diaryDateElement.value = getDateStrForDateInput(today);
+  diaryDateElement.setAttribute("max", getDateStrForDateInput(today));
+
+  const yesterdayNotIncludeTime = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+  let isSetYesterDay = true;
+  fetch("https://script.google.com/macros/s/AKfycbzgs-Dg66pfTGYLEQwqOzchVT_MG2D2qlhBIItrQa9cGcOE314Ak5rYf2ERCrkOCUQtwQ/exec")
+    .then(response => response.json())
+    .then(data => {
+      for (let i = 0; i < data.length; i++) {
+        const diaryDate = new Date(data[i].Date);
+        if (new Date(diaryDate.getFullYear(), diaryDate.getMonth(), diaryDate.getDate()).getTime() == yesterdayNotIncludeTime.getTime()) {
+          diaryDateElement.value = getDateStrForDateInput(today);
+          break;
+        }
+        diaryDateElement.value = getDateStrForDateInput(yesterdayNotIncludeTime);
+      }
+    });
 
   setInterval("updateDisplay()", 100);
 </script>
